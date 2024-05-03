@@ -1,0 +1,2 @@
+﻿Service Provider: https://github.com/dotnet/runtime/blob/9e6ba1f68c6a9c7206dacdf1e4cac67ea19931eb/src/libraries/Microsoft.Extensions.DependencyInjection/src/ServiceProvider.cs#L235
+ASP.NET CreateScope: https://github.com/dotnet/aspnetcore/blob/ed90662610b5770c9b0952d9c2db740388171bf3/src/Hosting/Hosting/src/Internal/ConfigureBuilder.cs#L26
