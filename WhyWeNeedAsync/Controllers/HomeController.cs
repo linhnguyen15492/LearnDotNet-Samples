@@ -18,15 +18,20 @@ namespace WhyWeNeedAsync.Controllers
             return Content("ASP.NET threadpool starvation demo - https://github.com/daohainam/LearnDotNet-Samples");
         }
 
-        private async Task<Product> FindProduct(int productId, string name)
+        private async Task<Product> FindProductAsync(int productId, string name)
         {
             await Task.Delay(1000);
+            return new Product() { Id = productId, Name = name };
+        }
+        private Product FindProduct(int productId, string name)
+        {
+            Task.Delay(1000).Wait();
             return new Product() { Id = productId, Name = name };
         }
         [Route("/taskresultwait")]
         public IActionResult TaskResultWait()
         {
-            var product = FindProduct(1, "Apple iPhone").Result;
+            var product = FindProduct(1, "Apple iPhone");
 
             return Ok("/taskresultwait:success");
         }
@@ -34,7 +39,7 @@ namespace WhyWeNeedAsync.Controllers
         [Route("/taskawait")]
         public async Task<IActionResult> TaskAwait()
         {
-            var product = await FindProduct(1, "Apple iPhone");
+            var product = await FindProductAsync(1, "Apple iPhone");
 
             return Ok("/taskawait:success");
         }
