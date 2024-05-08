@@ -46,6 +46,7 @@ Lưu ý: kế hoạch và nội dung của các bài học trong tương lai có
 - Configuration
 - Dependency injection
 - Caching
+- Reflection
 - Lập trình đa luồng (multithreading)
 - Socket programming
 - Làm việc với HttpClient
