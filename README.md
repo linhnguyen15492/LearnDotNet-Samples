@@ -4,7 +4,7 @@ Link đến khóa học: https://www.youtube.com/playlist?list=PLRLJQuuRRcFlaITD
 
 ## Mục tiêu: 
 - Xây dựng nền tảng cơ bản cho một .NET developer để có thể làm việc độc lập hoặc key member trong một nhóm.
-- Nội dung bao quát hầu như toàn bộ các thành phần nền tảng trong .NET, tạo tiền đề học tiếp lên các nhóm chủ đề chuyên biệt hơn (ASP.NET, writing API, microservices...)
+- Nội dung bao quát hầu như toàn bộ các thành phần nền tảng trong .NET, tạo tiền đề học tiếp lên các nhóm chủ đề chuyên biệt hơn (ASP.NET, writing API, Entity Framework, microservices...)
 
 ## Tổng quan chương trình:
 Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
@@ -14,7 +14,7 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Bài tập áp dụng kiến thức đã học kết hợp tìm hiểu các mẫu thiết kế (design pattern).
 
 ## Nội dung:
-Lưu ý: kế hoạch và nội dung của các bài học trong tương lai có thể thay đổi.
+*Lưu ý: kế hoạch và nội dung của các bài học trong tương lai có thể thay đổi.*
 
 ### Đã hoàn thành
 - Cài đặt Visual Studio và viết chương trình .NET đầu tiên 
@@ -38,6 +38,7 @@ Lưu ý: kế hoạch và nội dung của các bài học trong tương lai có
 - Bài tập 2 (thiết kế và viết chương trình xuất dữ liệu từ database ra file)
 
 ### Kế hoạch
+*Các bài học sẽ ra mắt theo thứ tự dưới đây*
 - Disconnected database với ADO.NET
 - Repository và Unit of Work design pattern
 - Preprocessing directives 
