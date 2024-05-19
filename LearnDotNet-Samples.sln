@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFind", "NFind\NFind.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhyWeNeedAsync", "WhyWeNeedAsync\WhyWeNeedAsync.csproj", "{48E67E6C-1015-4BE4-B10E-0D0F71E442F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadPoolSample", "ThreadPoolSample\ThreadPoolSample.csproj", "{CAC74623-226B-473D-9FB8-59972ADEE35E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadPoolSample", "ThreadPoolSample\ThreadPoolSample.csproj", "{CAC74623-226B-473D-9FB8-59972ADEE35E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositorySample", "RepositorySample\RepositorySample.csproj", "{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CAC74623-226B-473D-9FB8-59972ADEE35E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC74623-226B-473D-9FB8-59972ADEE35E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC74623-226B-473D-9FB8-59972ADEE35E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
