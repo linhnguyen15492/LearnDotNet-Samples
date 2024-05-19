@@ -39,7 +39,6 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Disconnected database với ADO.NET
 - Repository và Unit of Work design pattern
 - Preprocessing directives 
 - Logging
