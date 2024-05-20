@@ -1,8 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using RepositorySample.Entities;
 using RepositorySample.Repository;
 using RepositorySample.Repository.InMemory;
 using RepositorySample.Repository.SqlServer;
+using RepositorySample.UnitOfWork.SqlServer;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -12,23 +14,33 @@ namespace RepositorySample
     {
         static void Main(string[] args)
         {
-            string connectionString = ""; // get from ConnectionStrings
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .AddJsonFile("appSettings.json", optional: true)
+                .AddJsonFile("connectionStrings.json", optional: true)
+                .Build();
+
+            string connectionString = config.GetConnectionString("ShopDatabase") ?? string.Empty; // get from ConnectionStrings
 
             if (connectionString.Length > 0 )
             {
                 var sqlConnection = new SqlConnection(connectionString);
                 sqlConnection.Open();
+
                 var trans = sqlConnection.BeginTransaction();
 
                 var orderRepository = new SqlServerOrderRepository(sqlConnection, trans);
                 var productRepository = new SqlServerProductRepository(sqlConnection, trans);
 
+                orderRepository.DeleteAll();
+                productRepository.DeleteAll();
+
                 InsertSampleProducts(productRepository);
                 QueryProducts(productRepository);
-                CreateOrders(orderRepository);
+                trans.Commit();
+
+                CreateOrders(sqlConnection);
                 QueryOrders(orderRepository);
 
-                trans.Commit();
             }
             else
             {
@@ -37,16 +49,43 @@ namespace RepositorySample
 
                 InsertSampleProducts(productRepository);
                 QueryProducts(productRepository);
-                CreateOrders(orderRepository);
-                QueryOrders(orderRepository);
             }
         }
 
-        private static void QueryOrders(IOrderRepository orderRepository)
+        private static void CreateOrders(SqlConnection sqlConnection)
         {
+            var uow = new SqlServerCheckoutUnitOfWork(sqlConnection);
+            var orderId = Guid.NewGuid();
+
+            uow.CreateOrder(new Order() { 
+                OrderReference = "00001",
+                CustomerId = Guid.Empty,
+                Id = orderId,
+                Items =
+                [
+                    new OrderItem()
+                    {
+                        Id = new Guid("00000000-0000-0000-0001-000000000001"),
+                        OrderId = orderId,
+                        Price = 999,
+                        ProductId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1
+                    },
+                    new OrderItem()
+                    {
+                        Id = new Guid("00000000-0000-0000-0001-000000000002"),
+                        OrderId = orderId,
+                        Price = 999,
+                        ProductId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Quantity = 1
+                    }
+                ]
+            });
+
+            uow.SaveChanges();
         }
 
-        private static void CreateOrders(IOrderRepository orderRepository)
+        private static void QueryOrders(IOrderRepository orderRepository)
         {
         }
 
@@ -85,23 +124,26 @@ namespace RepositorySample
         private static void InsertSampleProducts(IProductRepository productRepository)
         {
             productRepository.Add(new Product() { 
-                Id = Guid.NewGuid(),
+                Id = new Guid("00000000-0000-0000-0000-000000000001"),
                 Name = "Apple iPhone",
-                Price = 999
+                Price = 999, 
+                Quantity = 70,
             });
 
             productRepository.Add(new Product()
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("00000000-0000-0000-0000-000000000002"),
                 Name = "Apple iPad",
-                Price = 799
+                Price = 799,
+                Quantity = 10,
             });
 
             productRepository.Add(new Product()
             {
-                Id = Guid.NewGuid(),
+                Id = new Guid("00000000-0000-0000-0000-000000000003"),
                 Name = "Apple Macbook",
-                Price = 1399
+                Price = 1399,
+                Quantity = 20,
             });
         }
     }

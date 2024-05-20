@@ -18,11 +18,12 @@ namespace RepositorySample.Repository.SqlServer
         private const string FIND_ALL = "OrderId, CustomerId, OrderReference FROM Orders WHERE (1 = 1)";
         private const string FIND_ITEMS = "SELECT OrderItemId, ProductId, Quantity, Price FROM OrderItems WHERE OrderId = @OrderId";
         private const string INSERT_ITEM_COMMAND = "INSERT INTO OrderItems VALUES (@OrderItemId, @OrderId, @ProductId, @Quantity, @Price)";
+        private const string DELETE_ALL = "DELETE FROM OrderItems; DELETE FROM Orders;";
 
         private readonly SqlConnection connection;
         private readonly SqlTransaction? transaction;
 
-        public SqlServerOrderRepository(SqlConnection connection, SqlTransaction transaction)
+        public SqlServerOrderRepository(SqlConnection connection, SqlTransaction? transaction)
         {
             this.connection = connection ?? throw new ArgumentNullException(nameof(connection));
             this.transaction = transaction;
@@ -229,6 +230,18 @@ namespace RepositorySample.Repository.SqlServer
             {
                 return null;
             }
+        }
+
+        public int DeleteAll()
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = DELETE_ALL;
+            if (transaction != null)
+            {
+                cmd.Transaction = transaction;
+            }
+
+            return cmd.ExecuteNonQuery();
         }
     }
 }

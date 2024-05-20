@@ -25,6 +25,14 @@ namespace RepositorySample.Repository.InMemory
             return order;
         }
 
+        public int DeleteAll()
+        {
+            var c = orders.Count;
+
+            orders.Clear();
+            return c;
+        }
+
         public IEnumerable<Order> Find(OrderFindCreterias creterias, OrderSortBy sortBy = OrderSortBy.ReferenceAscending)
         {
             var query = from o in orders select o;

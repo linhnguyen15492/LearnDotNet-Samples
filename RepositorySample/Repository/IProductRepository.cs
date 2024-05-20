@@ -12,5 +12,7 @@ namespace RepositorySample.Repository
         Product? FindById(Guid id);
         IEnumerable<Product> Find(ProductFindCreterias creterias, ProductSortBy sortBy = ProductSortBy.NameAscending);
         Product? Add(Product product);
+        int DeleteAll();
+        int Update(Product product);
     }
 }

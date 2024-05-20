@@ -13,5 +13,6 @@ namespace RepositorySample.Repository
         Order? FindByReference(string reference);
         IEnumerable<Order> Find(OrderFindCreterias creterias, OrderSortBy sortBy = OrderSortBy.ReferenceAscending);
         Order? Add(Order order);
+        int DeleteAll();
     }
 }

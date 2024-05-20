@@ -18,6 +18,13 @@ namespace RepositorySample.Repository.InMemory
             return product;
         }
 
+        public int DeleteAll()
+        {
+            int count = products.Count;
+            products.Clear();
+            return count;
+        }
+
         public IEnumerable<Product> Find(ProductFindCreterias creterias, ProductSortBy sortBy = ProductSortBy.NameAscending)
         {
             var query = from o in products select o;
@@ -58,6 +65,20 @@ namespace RepositorySample.Repository.InMemory
         public Product? FindById(Guid id)
         {
             return products.Where(p => p.Id == id).FirstOrDefault();
+        }
+
+        public int Update(Product product)
+        {
+            var p = products.Where(p => p.Id == product.Id).FirstOrDefault();
+            if (p != null)
+            {
+                products.Remove(p);
+                products.Add(product);
+
+                return 1;
+            }
+
+            return 0;
         }
     }
 }

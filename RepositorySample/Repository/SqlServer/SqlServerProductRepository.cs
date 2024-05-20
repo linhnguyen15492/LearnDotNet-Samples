@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using RepositorySample.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,15 +12,17 @@ namespace RepositorySample.Repository.SqlServer
 {
     internal class SqlServerProductRepository : IProductRepository
     {
-        private const string INSERT_COMMAND = "INSERT INTO Products VALUES (@ProductId, @ProductName, @ProductPrice)";
-        private const string FIND_BY_ID_QUERY = "SELECT ProductName, ProductPrice FROM Products WHERE ProductId = @ProductId";
+        private const string INSERT_COMMAND = "INSERT INTO Products VALUES (@ProductId, @ProductName, @ProductPrice, @Quantity)";
+        private const string UPDATE_COMMAND = "UPDATE Products SET ProductName = @ProductName, ProductPrice = @ProductPrice, Quantity = @Quantity WHERE ProductId = @ProductId";
+        private const string FIND_BY_ID_QUERY = "SELECT ProductName, ProductPrice, Quantity FROM Products WHERE ProductId = @ProductId";
         private const string SELECT = "SELECT ";
-        private const string FIND_ALL = "ProductId, ProductName, ProductPrice FROM Products WHERE (1 = 1)";
+        private const string FIND_ALL = "ProductId, ProductName, ProductPrice, Quantity FROM Products WHERE (1 = 1)";
+        private const string DELETE_ALL = "DELETE FROM Products";
 
         private readonly SqlConnection connection;
         private readonly SqlTransaction? transaction;
 
-        public SqlServerProductRepository(SqlConnection connection, SqlTransaction transaction)
+        public SqlServerProductRepository(SqlConnection connection, SqlTransaction? transaction)
         {
             this.connection = connection ?? throw new ArgumentNullException(nameof(connection));
             this.transaction = transaction;
@@ -35,8 +38,9 @@ namespace RepositorySample.Repository.SqlServer
             }
 
             cmd.Parameters.Add(new SqlParameter("@ProductId", System.Data.SqlDbType.UniqueIdentifier)).Value = product.Id;
-            cmd.Parameters.Add(new SqlParameter("@ProductName", SqlDbType.UniqueIdentifier)).Value = product.Name;
-            cmd.Parameters.Add(new SqlParameter("@ProductPrice", System.Data.SqlDbType.NVarChar, 20)).Value = product.Price;
+            cmd.Parameters.Add(new SqlParameter("@ProductName", SqlDbType.NVarChar, 255)).Value = product.Name;
+            cmd.Parameters.Add(new SqlParameter("@ProductPrice", System.Data.SqlDbType.Float)).Value = product.Price;
+            cmd.Parameters.Add(new SqlParameter("@Quantity", System.Data.SqlDbType.Int)).Value = product.Quantity;
 
             if (cmd.ExecuteNonQuery() > 0)
             {
@@ -46,6 +50,18 @@ namespace RepositorySample.Repository.SqlServer
             {
                 return null;
             }
+        }
+
+        public int DeleteAll()
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = DELETE_ALL;
+            if (transaction != null)
+            {
+                cmd.Transaction = transaction;
+            }
+
+            return cmd.ExecuteNonQuery();
         }
 
         public IEnumerable<Product> Find(ProductFindCreterias creterias, ProductSortBy sortBy = ProductSortBy.NameAscending)
@@ -84,6 +100,12 @@ namespace RepositorySample.Repository.SqlServer
                 cmd.Parameters.Add(new SqlParameter("@MaxPrice", SqlDbType.Float)).Value = creterias.MaxPrice;
             }
 
+            if (!string.IsNullOrEmpty(creterias.Name))
+            {
+                sql.Append(" AND ProductName LIKE @ProductName");
+                cmd.Parameters.Add(new SqlParameter("@ProductName", SqlDbType.NVarChar, 255)).Value = "%" + creterias.Name + "%";
+            }
+
             if (sortBy == ProductSortBy.PriceAscending)
             {
                 sql.Append(" ORDER BY ProductPrice");
@@ -120,7 +142,8 @@ namespace RepositorySample.Repository.SqlServer
                     {
                         Id = reader.GetGuid(0),
                         Name = reader.GetString(1),
-                        Price = reader.GetDouble(2)
+                        Price = reader.GetDouble(2),
+                        Quantity = reader.GetInt32(3),
                     });
                 }
             }
@@ -146,13 +169,31 @@ namespace RepositorySample.Repository.SqlServer
                 {
                     Id = id,
                     Name = reader.GetString(0),
-                    Price = reader.GetDouble(1)
+                    Price = reader.GetDouble(1),
+                    Quantity = reader.GetInt32(2),
                 };
             }
             else
             {
                 return null;
             }
+        }
+
+        public int Update(Product product)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = UPDATE_COMMAND;
+            if (transaction != null)
+            {
+                cmd.Transaction = transaction;
+            }
+
+            cmd.Parameters.Add(new SqlParameter("@ProductId", System.Data.SqlDbType.UniqueIdentifier)).Value = product.Id;
+            cmd.Parameters.Add(new SqlParameter("@ProductName", SqlDbType.NVarChar, 255)).Value = product.Name;
+            cmd.Parameters.Add(new SqlParameter("@ProductPrice", System.Data.SqlDbType.Float)).Value = product.Price;
+            cmd.Parameters.Add(new SqlParameter("@Quantity", System.Data.SqlDbType.Int)).Value = product.Quantity;
+
+            return cmd.ExecuteNonQuery();
         }
     }
 }
