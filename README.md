@@ -36,10 +36,10 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Giới thiệu ADO.NET
 - CRUD với ADO.NET
 - Bài tập 2 (thiết kế và viết chương trình xuất dữ liệu từ database ra file)
+- Repository và Unit of Work design pattern
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Repository và Unit of Work design pattern
 - Preprocessing directives 
 - Logging
 - Using attributes
