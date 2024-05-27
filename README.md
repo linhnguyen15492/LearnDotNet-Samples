@@ -45,6 +45,7 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Using attributes
 - Configuration
 - Dependency injection
+- Generic host 
 - Caching
 - Reflection
 - Lập trình đa luồng (multithreading)
