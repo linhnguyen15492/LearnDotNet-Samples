@@ -41,11 +41,11 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
+- Generic host 
 - Logging
 - Using attributes
 - Configuration
 - Dependency injection
-- Generic host 
 - Caching
 - Reflection
 - Lập trình đa luồng (multithreading)
