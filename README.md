@@ -38,11 +38,11 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Bài tập 2 (thiết kế và viết chương trình xuất dữ liệu từ database ra file)
 - Repository và Unit of Work design pattern
 - Preprocessing directives 
+- Generic host 
+- Logging
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Generic host 
-- Logging
 - Using attributes
 - Configuration
 - Dependency injection
