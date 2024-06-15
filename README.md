@@ -40,10 +40,10 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Preprocessing directives 
 - Generic host 
 - Logging
+- Using attributes
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Using attributes
 - Configuration
 - Dependency injection
 - Caching
