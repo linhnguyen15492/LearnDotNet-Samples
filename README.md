@@ -42,10 +42,10 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Logging
 - Using attributes
 - Configuration
+- Dependency injection
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Dependency injection
 - Caching
 - Reflection
 - Lập trình đa luồng (multithreading)
