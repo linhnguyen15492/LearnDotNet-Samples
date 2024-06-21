@@ -43,15 +43,14 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Using attributes
 - Configuration
 - Dependency injection
+- Caching
+- Reflection
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Caching
-- Reflection
 - Lập trình đa luồng (multithreading)
+- Lập trình bất đồng bộ với async/await
 - Socket programming
 - Làm việc với HttpClient
-- Expression tree
-- Bài tập (viết một thư viện đơn giản tương tự Entity Framework)
 
 Các video bài tập có thể được cập nhật thêm sau khi hoàn thành khóa học.
