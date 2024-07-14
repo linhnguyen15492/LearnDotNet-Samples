@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ConfigFiles\KeyPerFile\KeyPerFileConfigSample__StringValue">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ConfigFiles\mysettings.optional.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

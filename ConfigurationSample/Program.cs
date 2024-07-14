@@ -10,7 +10,7 @@ namespace ConfigurationSample
                 .AddJsonFile("ConfigFiles/mysettings.json", optional: false)
                 .AddJsonFile("ConfigFiles/mysettings.optional.json", optional: true)
                 .AddXmlFile("ConfigFiles/mysettings.xml")
-                .AddKeyPerFile("ConfigFiles/KeyPerFile", optional: true)
+                .AddKeyPerFile(@"C:\Users\namdo\source\repos\LearnDotNet-Samples\ConfigurationSample\ConfigFiles\KeyPerFile\", optional: true)
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
                 .Build();
