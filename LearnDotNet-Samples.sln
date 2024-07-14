@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThreadPoolSample", "ThreadP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositorySample", "RepositorySample\RepositorySample.csproj", "{3461F3AF-634C-48B6-ABD1-CFF8DD8C7877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggingSample", "LoggingSample\LoggingSample.csproj", "{1846DF7D-2306-4A43-8FE3-F478351EB9C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggingSample", "LoggingSample\LoggingSample.csproj", "{1846DF7D-2306-4A43-8FE3-F478351EB9C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationSample", "ConfigurationSample\ConfigurationSample.csproj", "{9686CFAD-C714-4815-BC88-497473A87D03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationSample", "ConfigurationSample\ConfigurationSample.csproj", "{9686CFAD-C714-4815-BC88-497473A87D03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task-Sample", "Task-Sample\Task-Sample.csproj", "{0AD865C9-4176-4661-84D7-2C75AF17DC7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{9686CFAD-C714-4815-BC88-497473A87D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9686CFAD-C714-4815-BC88-497473A87D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9686CFAD-C714-4815-BC88-497473A87D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD865C9-4176-4661-84D7-2C75AF17DC7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD865C9-4176-4661-84D7-2C75AF17DC7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD865C9-4176-4661-84D7-2C75AF17DC7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD865C9-4176-4661-84D7-2C75AF17DC7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
