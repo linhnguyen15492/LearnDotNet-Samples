@@ -45,12 +45,12 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Dependency injection
 - Caching
 - Reflection
-
-### Kế hoạch
-*Các bài học sẽ ra mắt theo thứ tự dưới đây*
 - Lập trình đa luồng (multithreading)
 - Lập trình bất đồng bộ với async/await
 - Socket programming
+
+### Kế hoạch
+*Các bài học sẽ ra mắt theo thứ tự dưới đây*
 - Bài tập: viết một HTTP 1.1 web server đơn giản hỗ trợ GET method, phục vụ được cả nội dung tĩnh và động.
 - Làm việc với HttpClient
 - Bài tập: nâng cấp web server để hỗ trợ POST, cookie, session và authorization với cookie hoặc JWT.
