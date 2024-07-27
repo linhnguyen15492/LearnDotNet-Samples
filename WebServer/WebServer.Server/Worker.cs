@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using WebServer.SDK;
 using WebServer.Server.RequestReaders;
+using WebServer.Server.ResponseBodyWriters;
 
     namespace WebServer.Server;
 
@@ -60,22 +61,50 @@ using WebServer.Server.RequestReaders;
         WRequest request = await requestReader.ReadRequestAsync(CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, cancelationTokenSource.Token).Token);
         // create response 
 
+        var content = @"<!DOCTYPE html>
+<html>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+</body>
+</html>";
+        var response = new WResponse()
+        {
+            ResponseCode = HttpResponseCodes.OK,
+            ContentLength = content.Length,
+            ResponseBodyWriter = new StringResponseBodyWriter(content)
+        };
+
         // handle the request
 
         // send back the response
-        await SendResponseAsync(socket);
+        await SendResponseAsync(socket, response);
 
         socket.Close();
     }
 
 
-    private async Task SendResponseAsync(Socket socket)
+    private async Task SendResponseAsync(Socket socket, WResponse response)
     {
         var stream = new NetworkStream(socket);
         var streamWriter = new StreamWriter(stream);
 
-        await streamWriter.WriteLineAsync("200 OK");
+        string reasonPhrase = response.ReasonPhrase;
+        if (string.IsNullOrEmpty(reasonPhrase)) {
+            reasonPhrase = HttpReasonPhrases.GetByCode(response.ResponseCode);
+        }
+
+        await streamWriter.WriteLineAsync($"{response.HttpVersion} {(int)response.ResponseCode} {reasonPhrase}");
+        await streamWriter.WriteLineAsync($"Content-Length: {response.ContentLength}");
+        await streamWriter.WriteLineAsync($"Content-Type: {response.ContentType}");
+        await streamWriter.WriteLineAsync();
         await streamWriter.FlushAsync();
+        if (response.ContentLength > 0) {
+            await response.ResponseBodyWriter.WriteAsync(stream);
+        }
+        await stream.FlushAsync();
     }
 
     
