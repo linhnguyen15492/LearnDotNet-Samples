@@ -53,6 +53,5 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
 - Bài tập: viết một HTTP 1.1 web server đơn giản hỗ trợ GET method, phục vụ được cả nội dung tĩnh và động.
 - Làm việc với HttpClient
-- Bài tập: nâng cấp web server để hỗ trợ POST, cookie, session và authorization với cookie hoặc JWT.
 
 Các video bài tập có thể được cập nhật thêm sau khi hoàn thành khóa học.
