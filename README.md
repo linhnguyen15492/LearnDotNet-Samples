@@ -48,10 +48,11 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 - Lập trình đa luồng (multithreading)
 - Lập trình bất đồng bộ với async/await
 - Socket programming
+- Bài tập: viết một HTTP 1.1 web server đơn giản hỗ trợ GET method, phục vụ được cả nội dung tĩnh và động.
+
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Bài tập: viết một HTTP 1.1 web server đơn giản hỗ trợ GET method, phục vụ được cả nội dung tĩnh và động.
 - Làm việc với HttpClient
 
 Các video bài tập có thể được cập nhật thêm sau khi hoàn thành khóa học.
