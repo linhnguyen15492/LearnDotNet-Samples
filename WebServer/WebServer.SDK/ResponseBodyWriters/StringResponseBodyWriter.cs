@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WebServer.SDK;
 
-namespace WebServer.Server.ResponseBodyWriters
+namespace WebServer.SDK.ResponseBodyWriters
 {
-    internal class StringResponseBodyWriter : IResponseBodyWriter
+    public class StringResponseBodyWriter : IResponseBodyWriter
     {
         private readonly byte[] contentBytes;
 

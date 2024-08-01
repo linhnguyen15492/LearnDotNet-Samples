@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WebServer.SDK
 {
-    public enum HttpResponseCodes: int
+    public interface IResponseWriter
     {
-        OK = 200,
-        NotFound = 404
+        Task SendResponseAsync(WResponse response);
     }
 }

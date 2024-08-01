@@ -1,28 +1,41 @@
-using Microsoft.VisualBasic;
 using System.Net;
-    using System.Net.Sockets;
-using System.Text;
+using System.Net.Sockets;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using WebServer.Middleware.StaticContent;
 using WebServer.SDK;
+using WebServer.Server.DefaultMiddlewares;
 using WebServer.Server.RequestReaders;
-using WebServer.Server.ResponseBodyWriters;
+using WebServer.SDK.ResponseBodyWriters;
 
-    namespace WebServer.Server;
+namespace WebServer.Server;
 
-    public class Worker : BackgroundService
+public class Worker : BackgroundService
     {
     private WebServerOptions options;
+    private readonly IRequestReaderFactory requestReaderFactory;
+    private readonly IResponseWriterFactory responseWriterFactory;
     private readonly ILogger<Worker> _logger;
-    private readonly ILoggerFactory _loggerFactory;
 
-    public Worker(WebServerOptions options, ILogger<Worker> logger, ILoggerFactory loggerFactory)
+    private ICallable firstMiddleware = new NullCallable();
+
+    public Worker(WebServerOptions options,
+        IRequestReaderFactory requestReaderFactory,
+        IResponseWriterFactory responseWriterFactory,
+        ILogger<Worker> logger)
     {
-        this.options = options ?? throw new ArgumentNullException(nameof(options)); 
+        this.options = options ?? throw new ArgumentNullException(nameof(options));
+        this.requestReaderFactory = requestReaderFactory;
+        this.responseWriterFactory = responseWriterFactory;
         _logger = logger;
-        _loggerFactory = loggerFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        AddMiddleware(new NotFoundMiddleware());
+        AddMiddleware(new StaticContentMiddleware());
+
+
         var endPoint = new IPEndPoint(string.IsNullOrEmpty(options.IPAddress) ? IPAddress.Any : IPAddress.Parse(options.IPAddress) , options.Port);
         using var serverSocket = new Socket(
             endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp
@@ -55,57 +68,40 @@ using WebServer.Server.ResponseBodyWriters;
     private async Task HandleNewClientConnectionAsync(Socket socket, CancellationToken stoppingToken)
     {
         var cancelationTokenSource = new CancellationTokenSource(3000);
-        IRequestReader requestReader = new DefaultRequestReader(socket, _loggerFactory.CreateLogger<DefaultRequestReader>());
+        IRequestReader requestReader = requestReaderFactory.Create(socket);
 
         // read request from socket
         WRequest request = await requestReader.ReadRequestAsync(CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, cancelationTokenSource.Token).Token);
         // create response 
 
-        var content = @"<!DOCTYPE html>
-<html>
-<body>
-
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
-</body>
-</html>";
         var response = new WResponse()
         {
-            ResponseCode = HttpResponseCodes.OK,
-            ContentLength = content.Length,
-            ResponseBodyWriter = new StringResponseBodyWriter(content)
         };
 
+        var invokeCancelationTokenSource = new CancellationTokenSource(15000);
+
         // handle the request
+        await InvokeMiddlewaresAsync(new MiddlewareContext() { 
+            Request = request, Response = response 
+        },
+        CancellationTokenSource.CreateLinkedTokenSource(stoppingToken, invokeCancelationTokenSource.Token).Token
+        );
+
 
         // send back the response
-        await SendResponseAsync(socket, response);
+        IResponseWriter responseWriter = responseWriterFactory.Create(socket);
+        await responseWriter.SendResponseAsync(response);
 
         socket.Close();
     }
 
-
-    private async Task SendResponseAsync(Socket socket, WResponse response)
+    private async Task InvokeMiddlewaresAsync(MiddlewareContext context, CancellationToken cancellationToken)
     {
-        var stream = new NetworkStream(socket);
-        var streamWriter = new StreamWriter(stream);
-
-        string reasonPhrase = response.ReasonPhrase;
-        if (string.IsNullOrEmpty(reasonPhrase)) {
-            reasonPhrase = HttpReasonPhrases.GetByCode(response.ResponseCode);
-        }
-
-        await streamWriter.WriteLineAsync($"{response.HttpVersion} {(int)response.ResponseCode} {reasonPhrase}");
-        await streamWriter.WriteLineAsync($"Content-Length: {response.ContentLength}");
-        await streamWriter.WriteLineAsync($"Content-Type: {response.ContentType}");
-        await streamWriter.WriteLineAsync();
-        await streamWriter.FlushAsync();
-        if (response.ContentLength > 0) {
-            await response.ResponseBodyWriter.WriteAsync(stream);
-        }
-        await stream.FlushAsync();
+        await firstMiddleware.InvokeAsync(context, cancellationToken);
     }
 
-    
+    private void AddMiddleware(IMiddleware middleware)
+    {
+        firstMiddleware = new Callable() { Middleware = middleware, Next = firstMiddleware };
+    }
 }

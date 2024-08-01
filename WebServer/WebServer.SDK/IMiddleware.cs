@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebServer.SDK
 {
-    public enum HttpResponseCodes: int
+    public interface IMiddleware
     {
-        OK = 200,
-        NotFound = 404
+        Task InvokeAsync(MiddlewareContext context, ICallable next, CancellationToken cancellationToken);
     }
 }
