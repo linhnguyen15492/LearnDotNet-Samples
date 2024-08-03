@@ -53,7 +53,7 @@ Khóa học sẽ bao gồm 4 nhóm nội dung cơ bản:
 
 ### Kế hoạch
 *Các bài học sẽ ra mắt theo thứ tự dưới đây*
-- Làm việc với HttpClient
 - Giới thiệu về Windows Form
+- Làm việc với HttpClient
 
 Các video bài tập có thể được cập nhật thêm sau khi hoàn thành khóa học.
