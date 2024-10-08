@@ -8,12 +8,11 @@ namespace ChatServer
 {
     internal class Program
     {
-
+        // đây là phiên bản đã được chỉnh sửa, nếu bạn muốn xem code trình bày trên video Youtube (bài học lập trình Socket), hãy 
+        // tham khảo: https://github.com/daohainam/LearnDotNet-Samples/tree/af72bd21659bbc164ff85284ce654e8a2f1339f4 
 
         static async Task Main(string[] args)
         {
-            int clientId = 1;
-
             var endPoint = new IPEndPoint(IPAddress.Loopback, ChatProtocol.Constants.DefaultChatPort);
             var serverSocket = new Socket(
                 endPoint.AddressFamily,
@@ -27,46 +26,73 @@ namespace ChatServer
 
             serverSocket.Listen();
 
-            var clientHandlers = new List<Task>();
 
-            while (true)
-            {
-                var clientSocket = await serverSocket.AcceptAsync();
-                var t = handleClientRequestAsync(clientSocket, clientId++);
-                clientHandlers.Add(t);
-            }
+            CancellationTokenSource cancellationTokenSource = new();
+            var cancellationToken = cancellationTokenSource.Token;
 
-            Task.WaitAll([.. clientHandlers]);
-       }
+            var acceptTask = AcceptConnectionsAsync(serverSocket, cancellationToken);
 
-        private static async Task handleClientRequestAsync(Socket clientSocket, int clientId)
+            Console.WriteLine("Press Enter to shutdown the server...");
+            Console.ReadLine();
+
+            cancellationTokenSource.Cancel();
+            await acceptTask;
+        }
+
+        private static async Task HandleClientRequestAsync(Socket clientSocket, int clientId, CancellationToken cancellationToken)
         {
             Console.WriteLine($"[Client {clientId}] connected!");
 
             var welcomeBytes = Encoding.UTF8.GetBytes(Constants.WelcomeText);
-            await clientSocket.SendAsync(welcomeBytes);
+            await clientSocket.SendAsync(welcomeBytes, cancellationToken);
 
             var buffer = new byte[1024];
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var r = await clientSocket.ReceiveAsync(buffer);
-                var msg = Encoding.UTF8.GetString(buffer, 0, r);
-
-                if (msg.Equals(Constants.CommandShutdown))
+                try
                 {
-                    closeConnection(clientSocket);
-                    Console.WriteLine($"[Client {clientId}] disconnected!");
-                    break;
-                }
+                    var r = await clientSocket.ReceiveAsync(buffer, cancellationToken: cancellationToken);
+                    var msg = Encoding.UTF8.GetString(buffer, 0, r);
 
-                Console.WriteLine($"[Client {clientId}]: {msg}");
+                    if (msg.Equals(Constants.CommandShutdown))
+                    {
+                        CloseConnection(clientSocket);
+                        Console.WriteLine($"[Client {clientId}] disconnected!");
+                        break;
+                    }
+
+                    Console.WriteLine($"[Client {clientId}]: {msg}");
+                } catch (OperationCanceledException)
+                { }
             }
         }
 
-        private static void closeConnection(Socket clientSocket)
+        private static void CloseConnection(Socket clientSocket)
         {
             clientSocket.Close();
+        }
+
+        private static async Task AcceptConnectionsAsync(Socket serverSocket, CancellationToken cancellationToken)
+        {
+            var clientHandlers = new List<Task>();
+            int clientId = 1;
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    var clientSocket = await serverSocket.AcceptAsync(cancellationToken);
+                    var t = HandleClientRequestAsync(clientSocket, clientId++, cancellationToken);
+                    clientHandlers.Add(t);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+            }
+
+            await Task.WhenAll(clientHandlers);
         }
     }
 }
